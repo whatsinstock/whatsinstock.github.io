@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <title>Info Windows</title>
+    <title>What's in Stock?</title>
     <style>
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -166,7 +166,7 @@
                 }, 'slow');
             } else {
                 $.ajax({
-                    url: 'https://webhook.site/2ddcff16-9a3a-4a60-9033-499333c013e0',
+                    url: 'https://626j2t6024.execute-api.us-east-1.amazonaws.com/record_inventory_feedback',
                     type: 'post',
                     data: "storeName=" + $('#storeName').val() + "&" + $('#myForm').serialize(),
                     success: function() {
