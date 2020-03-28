@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Info Windows</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      function initMap() {
+
+        const Http = new XMLHttpRequest();
+        const url = "https://inventoryinformationbucket.s3.amazonaws.com/store_info.json";
+        Http.open("GET", url, true);
+        Http.send();
+
+        Http.onreadystatechange = (e) => {
+          var data = JSON.parse(Http.responseText);
+
+          console.log(data);
+        
+          var center = {lat: 40.868723, lng: -73.873971};
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: center
+          });
+
+          var cars = ["BMW", "Volvo", "Saab", "Ford", "Fiat", "Audi"];
+          var i = 0;
+
+          var contentStrings = [];
+          var markers = [];
+
+          var infowindow = new google.maps.InfoWindow({
+            content: "Please wait..."
+          });
+
+          for (storeName in data) {
+            var address = data[storeName].Address;
+            var lat = data[storeName].lat;
+            var lng = data[storeName].lng;
+            var url = data[storeName].url;
+            // console.log(address)
+
+            var contentstring = `<h2>` + storeName + `</h2><a href="https://www.google.com/maps/search/?api=1&query=` + lat + `,` + lng + `">` + address + `</a><br><br>`
+            
+            tableMiddle = ""
+            for (var idx = 0; idx < data[storeName].Products.length; idx++) {
+              var product_data = data[storeName].Products[idx]
+              tableMiddle = tableMiddle + `<tr><td>` + product_data[0] + `</td><td><font color="` + product_data[2] + `">` + product_data[1] + `</font></td></tr>`;
+            }
+
+            tableMiddle = `<table><tr>
+              <th>Item</th>
+              <th>Availability</th>
+            </tr>` + tableMiddle + "</table>";
+
+            contentstring += tableMiddle;
+
+            // console.log(contentstring);
+
+            var coord = {
+              lat: parseFloat(lat),
+              lng: parseFloat(lng)
+            }
+
+            console.log(coord);
+
+            var marker = new google.maps.Marker({
+              position: coord,
+              map: map,
+              title: storeName,
+              icon: {
+                url: url
+              },
+              info: contentstring
+
+            });
+
+            marker.addListener('click', function(e) {
+              infowindow.setContent(this.info);
+              infowindow.open(map, this)
+            });
+
+            markers.push(marker);
+          }
+
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb60HR2ZjXrhWc9EdWkzvKMMBt7AkfPNA&callback=initMap">
+    </script>
+  </body>
+</html>
