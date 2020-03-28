@@ -10,7 +10,7 @@
       #map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
+      /* Make the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
@@ -48,9 +48,7 @@ tr:nth-child(even) {
 
         Http.onreadystatechange = (e) => {
           var data = JSON.parse(Http.responseText);
-
-          console.log(data);
-        
+          
           var center = {lat: 40.868723, lng: -73.873971};
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 10,
@@ -72,7 +70,6 @@ tr:nth-child(even) {
             var lat = data[storeName].lat;
             var lng = data[storeName].lng;
             var url = data[storeName].url;
-            // console.log(address)
 
             var contentstring = `<h2>` + storeName + `</h2><a href="https://www.google.com/maps/search/?api=1&query=` + lat + `,` + lng + `">` + address + `</a><br><br>`
             
@@ -89,14 +86,10 @@ tr:nth-child(even) {
 
             contentstring += tableMiddle;
 
-            // console.log(contentstring);
-
             var coord = {
               lat: parseFloat(lat),
               lng: parseFloat(lng)
             }
-
-            console.log(coord);
 
             var marker = new google.maps.Marker({
               position: coord,
