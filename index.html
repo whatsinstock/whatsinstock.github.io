@@ -43,6 +43,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <script>
+      // redirect to https
+      var loc = window.location.href+'';
+      if (loc.indexOf('http://')==0){
+          window.location.href = loc.replace('http://','https://');
+      }
+    </script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
