@@ -31,6 +31,10 @@
             margin: 0;
             padding: 0;
         }
+
+        #collapseExample {
+          text-align: left;
+        }
     </style>
     <style>
         table {
@@ -162,156 +166,11 @@
         </div>
     </div>
 
-    <script>
-        $('#myForm').submit(function(e) {
-            e.preventDefault();
 
-            var recaptcha = $("#g-recaptcha-response").val();
-            if (recaptcha === "") {
-                $('#captcha').animate({
-                    backgroundColor: '#FF0000'
-                }, 0);
-                $('#captcha').animate({
-                    backgroundColor: '#FFFFFF'
-                }, 'slow');
-            } else {
-                $.ajax({
-                    url: 'https://626j2t6024.execute-api.us-east-1.amazonaws.com/record_inventory_feedback',
-                    type: 'post',
-                    data: "storeName=" + $('#storeName').val() + "&" + $('#myForm').serialize(),
-                    success: function() {
-                        console.log("success");
-                        $('#myModal').modal('hide');
+    <script type="text/javascript" src="formscript.js"></script>
 
-                        $(".alert").show();
-                    }
-                });
-            }
-        });
-    </script>
+    <script type="text/javascript" src="script.js"></script>
 
-    <script>
-        function initMap() {
-
-            const Http = new XMLHttpRequest();
-            const url = "https://inventoryinformationbucket.s3.amazonaws.com/store_info.json";
-            Http.open("GET", url, true);
-            Http.send();
-
-            Http.onreadystatechange = (e) => {
-                var data = JSON.parse(Http.responseText);
-
-                console.log(data);
-
-                var center = {
-                    lat: 40.7190994,
-                    lng: -73.9633208
-                };
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 11,
-                    center: center
-                });
-
-                var cars = ["BMW", "Volvo", "Saab", "Ford", "Fiat", "Audi"];
-                var i = 0;
-
-                var contentStrings = [];
-                var markers = [];
-
-                var infowindow = new google.maps.InfoWindow({
-                    content: "hi"
-                });
-
-                for (storeName in data) {
-                    var address = data[storeName].Address;
-                    var lat = data[storeName].lat;
-                    var lng = data[storeName].lng;
-                    var url = data[storeName].url;
-
-                    var contentstring = `<h2>` + storeName + `</h2><a href="https://www.google.com/maps/search/?api=1&query=` + lat + `,` + lng + `">` + address + `</a><br><br>`
-
-                    tableMiddle = ""
-                    for (var idx = 0; idx < data[storeName].Products.length; idx++) {
-                        var product_data = data[storeName].Products[idx]
-                        tableMiddle = tableMiddle + `<tr><td>` + product_data[0] + `</td><td><font color="` + product_data[2] + `">` + product_data[1] + `</font></td></tr>`;
-                    }
-
-                    tableMiddle = `<table><tr>
-              <th>Item</th>
-              <th>Availability</th>
-            </tr>` + tableMiddle + "</table>";
-
-                    contentstring += tableMiddle;
-
-                    console.log(contentstring);
-
-                    var coord = {
-                        lat: parseFloat(lat),
-                        lng: parseFloat(lng)
-                    }
-
-                    console.log(coord);
-
-                    var marker = new google.maps.Marker({
-                        position: coord,
-                        map: map,
-                        title: storeName,
-                        icon: {
-                            url: url
-                        },
-                        info: contentstring
-
-                    });
-
-                  	marker.addListener('click', function(e) {
-                        infowindow.setContent(this.info);
-                        infowindow.open(map, this)
-                    });
-
-                    markers.push(marker);
-                }
-
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        var pos = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-
-                        map.setCenter(pos);
-
-                        console.log(pos);
-
-                        var min_dist = 99999999999999999;
-                        var closestStore;
-
-                        for (storeName in data) {
-                            var lat = data[storeName].lat;
-                            var lng = data[storeName].lng;
-
-                            var dist = google.maps.geometry.spherical.computeDistanceBetween(
-                                new google.maps.LatLng(pos.lat, pos.lng), new google.maps.LatLng(lat, lng)
-                            );
-
-                            console.log(dist);
-                            if (dist < min_dist) {
-                                min_dist = dist;
-                                closestStore = storeName;
-                            }
-                        }
-
-                        var threshold = 100; //100
-                        if (min_dist < threshold) {
-                            $('#storeName').val(closestStore);
-                            $('#myModal').modal('show');
-                        }
-
-                    });
-                }
-
-            }
-        }
-    </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb60HR2ZjXrhWc9EdWkzvKMMBt7AkfPNA&libraries=geometry&callback=initMap">
     </script>
 </body>
