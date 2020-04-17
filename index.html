@@ -2,177 +2,73 @@
 <html>
 
 <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162130254-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162130254-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-      gtag('config', 'UA-162130254-1');
-    </script>
+    gtag('config', 'UA-162130254-1');
+  </script>
 
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/whatsinstock/whatsinstock.github.io/master/favicon.ico" type="image/x-icon">
-    <title>What's in Stock?</title>
-    <style>
-        /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-        
-        #map {
-            height: 100%;
-        }
-        /* Optional: Makes the sample page fill the window. */
-        
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="utf-8" />
+  <title>What's in Stock?</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-        #collapseExample {
-          text-align: left;
-        }
-    </style>
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        td,
-        th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    
-    <script>
-      // redirect to https
-      var loc = window.location.href+'';
-      if (loc.indexOf('http://')==0){
-          window.location.href = loc.replace('http://','https://');
-      }
-    </script>
+  <!-- Listens for map resizing -->
+  <script src="https://inventorychecker-js.s3.amazonaws.com/css-element-queries/src/ResizeSensor.js"></script>
+  
+  <!-- Mapbox JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js">
+  </script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- Jquery and Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- Fontawesome -->
+  <script src="https://kit.fontawesome.com/ee2220fa25.js" crossorigin="anonymous"></script>
+
+  <!-- Custom Stylesheet -->
+  <link href="https://inventorychecker-js.s3.amazonaws.com/css4-16-20/style.css" rel="stylesheet"/>
+
 </head>
 
 <body>
+  <div id="mySidebar" class="sidebar">
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a> -->
+    <form id="filterForm" class="sidebarForm"></form>
 
-    <div class="alert alert-success alert-dismissible" role="alert">
-        Success! Thanks for helping fight basic supply shortages!
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+    <hr/>
 
-    <script>
-        $(".alert").hide();
-    </script>
+    <form class="sidebarForm" id="darkModeForm">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="darkModeSwitch" name="darkMode">
+        <label class="custom-control-label" for="darkModeSwitch"><font color="white">Dark Mode</font></label>
+      </div>
+    </form>
 
-    <div id="map"></div>
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
+  </div>
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Looks like you're at a grocery store. Mind helping us improve our data?</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="myForm">
+  <div id="main">
+    <button class="openbtn controlpanelbutton" onclick="toggleNav()" id="showitemsbutton">≫<span>&nbsp;Control Panel</span></button>  
+    <div id='map'></div>
+  </div>
 
-                        <div class="form-group row">
-                            <div class="col-sm-2">Store Name</div>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" id="storeName" value="NoStore">
-                            </div>
-                        </div>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/script.js"></script>
 
-                        <div class="form-group row">
-                            <div class="col-sm-2">Eggs</div>
-                            <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="eggs" value="1">Out of Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="eggs" value="2">Low on Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="eggs" value="3">In Stock
-                                </label>
-                            </div>
-                        </div>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/navscript.js"></script>
 
-                        <div class="form-group row">
-                            <div class="col-sm-2">Milk</div>
-                            <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="milk" value="1">Out of Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="milk" value="2">Low on Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="milk" value="3">In Stock
-                                </label>
-                            </div>
-                        </div>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/mapresizer.js"></script>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/darkmode.js"></script>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/flyto.js"></script>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/filterlist.js"></script>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/getuserloc.js"></script>
+  <script src="https://inventorychecker-js.s3.amazonaws.com/scripts4-16-20/formgenerator.js"></script>
 
-                        <div class="form-group row">
-                            <div class="col-sm-2">Toilet Paper</div>
-                            <div class="col-sm-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="tp" value="1">Out of Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="tp" value="2">Low on Stock
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="tp" value="3">In Stock
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group row" id="captcha">
-                            <div class="col-sm-10">
-                                <div class="g-recaptcha" data-sitekey="6LeN1-QUAAAAAEy5bqLIW3pIWd9IJ2S4f28uOvy_"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-10">
-                                <button type="submit" class="btn btn-primary">Send</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <script type="text/javascript" src="formscript.js"></script>
-
-    <script type="text/javascript" src="https://inventoryinformationbucket.s3.amazonaws.com/script.js"></script>
-
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb60HR2ZjXrhWc9EdWkzvKMMBt7AkfPNA&libraries=geometry&callback=initMap">
-    </script>
 </body>
 
 </html>
